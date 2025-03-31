@@ -5,7 +5,7 @@ import Line from "../ui/Line";
 
 const Benefits = () => {
   return (
-    <aside className="bg-neutral-100 p-4">
+    <aside className="bg-neutral-100 p-4 md:hidden">
       <div className="mb-4 flex items-center gap-4">
         <Line />
         <Text size="sm" position="center" color="darkest">

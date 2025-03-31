@@ -10,6 +10,8 @@ interface CartItemProps {
 const CartItem = ({ item }: CartItemProps) => {
   const { name, price, quantity, image } = item;
 
+  const total = quantity * price;
+
   return (
     <li className="flex items-center justify-between border-t border-gray-200 pt-4">
       <div className="flex items-center gap-4">
@@ -28,7 +30,9 @@ const CartItem = ({ item }: CartItemProps) => {
           <h3 className="text-gray-darkest text-sm font-bold">{name}</h3>
         </div>
       </div>
-      <div className="text-sm font-medium text-gray-900">${price}</div>
+      <div className="text-sm font-medium text-gray-900">
+        ${total.toFixed(2)}
+      </div>
     </li>
   );
 };

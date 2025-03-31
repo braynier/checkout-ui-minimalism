@@ -13,8 +13,9 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 import { countries, countryStatesMap, options } from "../../../data/data";
 import { DEFAULT_FORM_VALUES } from "../../constants/checkout-form-defaults";
-import { CheckoutFormData } from "../../types/checkout-form-types";
+
 import { checkoutSchema } from "../../schemas/checkout-form-schema";
+import { CheckoutFormData } from "../../types/checkout-form-types";
 
 const FORM_DATA_KEY = "CheckoutFormData";
 
@@ -137,7 +138,7 @@ const Checkout = () => {
               register={register("payment.method")}
             />
 
-            <div className="border-gray-lighter flex flex-col gap-3 rounded-b-md border-x border-b p-3">
+            <div className="border-gray-lighter flex flex-col gap-4 rounded-b-md border-x border-b p-3 pt-3">
               <FormInput
                 id="payment.cardNumber"
                 label="Card Number"

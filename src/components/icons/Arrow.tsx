@@ -1,6 +1,14 @@
-const Arrow = () => {
+interface ArrowProps {
+  direction?: "up" | "down";
+  className?: string;
+}
+
+const Arrow = ({ direction = "down", className = "" }: ArrowProps) => {
+  const rotationClass = direction === "up" ? "rotate-180" : "rotate-0";
+
   return (
     <svg
+      className={`${rotationClass} ${className}`}
       width="12"
       height="12"
       viewBox="0 0 12 12"

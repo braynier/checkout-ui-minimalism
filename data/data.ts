@@ -46,7 +46,7 @@ export const cart = [
   {
     id: 1,
     name: "LogoIpsum Product 1",
-    price: 299.97,
+    price: 99.99,
     quantity: 3,
     image: productImage,
   },

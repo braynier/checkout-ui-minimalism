@@ -19,15 +19,9 @@ const FormSelectInput = ({
   onChange,
 }: FormSelectInputProps) => {
   return (
-    <div className="flex flex-1/2 flex-col">
+    <div className="flex w-full flex-col">
       <div className="relative flex h-full flex-col">
-        <select
-          className="ring-gray-lighter text-gray-darkest appearance-none rounded-md px-4 pt-7 pb-2 text-sm font-normal ring-1"
-          id={id}
-          name={name}
-          value={value}
-          onChange={onChange}
-        >
+        <select id={id} name={name} value={value} onChange={onChange}>
           {options.map((option) => (
             <option key={option} value={option}>
               {option}

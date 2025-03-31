@@ -72,16 +72,16 @@ const FormInput = ({
 }: FormInputProps) => {
   if (type === "radio") {
     return (
-      <div className="flex flex-col">
+      <div className="flex w-full flex-col">
         <label className="sr-only" htmlFor={id}>
           {label}
         </label>
 
-        <div>
+        <div className="space-y-2">
           {options.map((option) => (
             <label
               key={option.id}
-              className="bg-blue-light ring-blue-dark flex cursor-pointer items-center gap-4 rounded-md p-4 ring-1"
+              className="bg-blue-light border-blue-dark flex cursor-pointer items-center gap-4 rounded-t-md border p-4"
             >
               <input
                 type="radio"
@@ -92,10 +92,10 @@ const FormInput = ({
                 onChange={onChange}
                 className="h-5 w-5"
               />
-              <span className="text-gray-darkest font-normal">
+              <span className="text-gray-darkest text-sm font-normal">
                 {option.title}
               </span>
-              <div className="flex gap-2">
+              <div className="flex gap-1">
                 {option.icons.map((Icon, index) => (
                   <Icon key={index} />
                 ))}
@@ -108,12 +108,11 @@ const FormInput = ({
   }
 
   return (
-    <div className="flex flex-1/2 flex-col">
+    <div className="flex w-full flex-col">
       <label className="sr-only" htmlFor={id}>
         {label}
       </label>
       <input
-        className="ring-gray-lighter placeholder:text-gray-light rounded-md p-4 ring-1 placeholder:text-sm placeholder:font-normal"
         id={id}
         name={name}
         type={type}

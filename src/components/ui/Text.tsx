@@ -37,7 +37,7 @@ export const Text = ({
 
   return (
     <p
-      className={`${sizeClasses[size]} ${colorClasses[color]} ${positionClasses[position]} ${bold ? "font-bold" : ""}`}
+      className={`min-w-fit ${sizeClasses[size]} ${colorClasses[color]} ${positionClasses[position]} ${bold ? "font-bold" : ""}`}
     >
       {children}
     </p>

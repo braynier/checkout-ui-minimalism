@@ -6,11 +6,8 @@ import FormSelectInput from "../form/FormSelect";
 import { Text } from "../ui/Text";
 import FormFieldGroup from "../form/FormField";
 import Form from "../form/Form";
-import Lock from "../icons/Lock";
-import { options } from "../../../data/data";
-
-const states = ["Arizona", "Kansas", "California"];
-const countries = ["United States", "Canada", "Mexico"];
+import Lock from "../icons/benefits/Lock";
+import { countries, countryStatesMap, options } from "../../../data/data";
 
 const Checkout = () => {
   const [formData, setFormData] = useState({
@@ -21,9 +18,9 @@ const Checkout = () => {
     city: "",
     state: "",
     zip: "",
-    country: "",
+    country: "United States",
     cardNumber: "",
-    card: "",
+    paymentMethod: "",
     expirationDate: "",
     securityCode: "",
     cardholderName: "",
@@ -32,7 +29,13 @@ const Checkout = () => {
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+      ...(name === "country" && { state: "" }), // Reset state when country changes
+    }));
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -41,7 +44,7 @@ const Checkout = () => {
   };
 
   return (
-    <section className="bg-neutral-100">
+    <section className="border-gray-lighter border-b">
       <Cart />
       <Form onSubmit={handleSubmit}>
         <FormFieldGroup title="Contact">
@@ -100,7 +103,7 @@ const Checkout = () => {
               id="state"
               label="State / Province"
               name="state"
-              options={states}
+              options={countryStatesMap[formData.country] || []}
               value={formData.state}
               onChange={handleChange}
             />
@@ -125,71 +128,77 @@ const Checkout = () => {
         </FormFieldGroup>
 
         <FormFieldGroup title="Payment">
-          <Text size="xs" color="light">
+          <Text size="xs" color="light" position="left">
             All transactions are secure and encrypted.
           </Text>
 
-          <FormInput
-            label="Payment Method"
-            id="paymentMethod"
-            name="paymentMethod"
-            type="radio"
-            placeholder="Payment Method"
-            value={formData.card}
-            onChange={handleChange}
-            options={options}
-            checkedValue="Credit Card"
-          />
-
-          <FormInput
-            id="cardNumber"
-            label="Card Number"
-            name="cardNumber"
-            placeholder="Card Number"
-            type="text"
-            value={formData.cardNumber}
-            onChange={handleChange}
-          />
-
-          <div className="flex gap-3">
+          <div className="bg-neutral-50">
             <FormInput
-              id="expirationDate"
-              label="Expiration (MM/YY)"
-              name="expirationDate"
-              placeholder="Expiration (MM/YY)"
-              type="text"
-              value={formData.expirationDate}
+              label="Payment Method"
+              id="paymentMethod"
+              name="paymentMethod"
+              type="radio"
+              placeholder="Payment Method"
+              value={formData.paymentMethod}
               onChange={handleChange}
+              options={options}
+              checkedValue="Credit Card"
             />
-            <FormInput
-              id="securityCode"
-              label="Security Code"
-              name="securityCode"
-              placeholder="Security Code"
-              type="text"
-              value={formData.securityCode}
-              onChange={handleChange}
-            />
+
+            <div className="border-gray-lighter flex flex-col gap-3 rounded-b-md border-x border-b p-3">
+              <FormInput
+                id="cardNumber"
+                label="Card Number"
+                name="cardNumber"
+                placeholder="Card Number"
+                type="text"
+                value={formData.cardNumber}
+                onChange={handleChange}
+              />
+
+              <div className="flex gap-3">
+                <FormInput
+                  id="expirationDate"
+                  label="Expiration (MM/YY)"
+                  name="expirationDate"
+                  placeholder="Expiration (MM/YY)"
+                  type="text"
+                  value={formData.expirationDate}
+                  onChange={handleChange}
+                />
+                <FormInput
+                  id="securityCode"
+                  label="Security Code"
+                  name="securityCode"
+                  placeholder="Security Code"
+                  type="text"
+                  value={formData.securityCode}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <FormInput
+                id="cardholderName"
+                label="Name on Card"
+                name="cardholderName"
+                placeholder="Name on Card"
+                type="text"
+                value={formData.cardholderName}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-          <FormInput
-            id="cardholderName"
-            label="Name on Card"
-            name="cardholderName"
-            placeholder="Name on Card"
-            type="text"
-            value={formData.cardholderName}
-            onChange={handleChange}
-          />
+        </FormFieldGroup>
 
+        <div className="flex flex-col gap-4 bg-white px-4 pb-3">
           <Button>Complete Order</Button>
-
           <div className="flex items-baseline justify-center gap-2">
             <Lock />
-            <Text size="sm" color="light">
+            <Text size="sm" color="light" position="center">
               All transactions are secured and encrypted
             </Text>
           </div>
-        </FormFieldGroup>
+        </div>
       </Form>
     </section>
   );

@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 
 const Header = () => {
   return (
-    <header className="mx-auto flex max-w-[1920px] items-center justify-between p-4">
+    <header className="border-gray-lighter mx-auto flex max-w-[1920px] items-center justify-between border-b p-4">
       <Logo />
       <Navbar />
     </header>

@@ -6,8 +6,8 @@
   --font-roboto: "Roboto", sans-serif;
   --font-poppins: "Poppins", sans-serif;
 
-  --color-gray-darkest: #333333;
   --color-gray-dark: #5c5c5c;
+  --color-gray-darkest: #333333;
 
   --color-gray-light: #828282;
   --color-gray-lighter: #e0e0e0;
@@ -19,6 +19,16 @@
   --color-blue-light: #f0f5ff;
 }
 
-body {
-  @apply font-roboto;
+@layer base {
+  body {
+    @apply font-roboto;
+  }
+
+  input {
+    @apply border-gray-lighter placeholder:text-gray-light w-full rounded-md border bg-white p-4 placeholder:text-sm placeholder:font-normal;
+  }
+
+  select {
+    @apply border-gray-lighter text-gray-darkest h-full w-full appearance-none rounded-md border px-4 pt-7 pb-2 text-sm font-normal;
+  }
 }

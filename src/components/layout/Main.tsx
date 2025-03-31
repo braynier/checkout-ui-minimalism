@@ -5,7 +5,9 @@ interface MainProps {
 }
 
 const Main = ({ children }: MainProps) => {
-  return <main className="mx-auto max-w-[1920px]"> {children}</main>;
+  return (
+    <main className="mx-auto max-w-[1920px] overflow-hidden"> {children}</main>
+  );
 };
 
 export default Main;

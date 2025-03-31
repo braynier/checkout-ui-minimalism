@@ -6,6 +6,9 @@ import Visa from "../src/components/icons/payment/Visa";
 import Mastercard from "../src/components/icons/payment/Mastercard";
 import Ames from "../src/components/icons/payment/Ames";
 import Diner from "../src/components/icons/payment/Diner";
+import Count from "../src/components/icons/payment/Count";
+
+import productImage from "../src/assets/product.png";
 
 export const benefits = [
   {
@@ -35,6 +38,24 @@ export const options = [
   {
     id: 1,
     title: "Credit Card",
-    icons: [Visa, Mastercard, Ames, Diner],
+    icons: [Visa, Mastercard, Ames, Diner, Count],
   },
 ];
+
+export const cart = [
+  {
+    id: 1,
+    name: "LogoIpsum Product 1",
+    price: 299.97,
+    quantity: 3,
+    image: productImage,
+  },
+];
+
+export const countries = ["United States", "Canada", "Mexico"];
+
+export const countryStatesMap: Record<string, string[]> = {
+  "United States": ["Arizona", "Kansas", "California", "Texas", "New York"],
+  Canada: ["Ontario", "Quebec", "British Columbia", "Alberta"],
+  Mexico: ["Jalisco", "Nuevo León", "Puebla", "Yucatán"],
+};

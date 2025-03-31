@@ -1,74 +1,29 @@
-// import { ChangeEvent } from "react";
-
-// type FormInputType = "text" | "email" | "number" | "radio";
-
-// interface FormInputProps {
-//   label: string;
-//   id: string;
-//   name: string;
-//   placeholder: string;
-//   value: string;
-//   type: FormInputType;
-//   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-// }
-
-// const FormInput = ({
-//   label,
-//   id,
-//   name,
-//   placeholder,
-//   value,
-//   type,
-//   onChange,
-// }: FormInputProps) => (
-//   <div className="flex flex-1/2 flex-col">
-//     <label className="sr-only" htmlFor={id}>
-//       {label}
-//     </label>
-//     <input
-//       className="ring-gray-lighter placeholder:text-gray-light rounded-md p-4 ring-1 placeholder:text-sm placeholder:font-normal"
-//       id={id}
-//       name={name}
-//       type={type}
-//       placeholder={placeholder}
-//       value={value}
-//       onChange={onChange}
-//     />
-//   </div>
-// );
-
-// export default FormInput;
-
-import { ChangeEvent } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 type FormInputType = "text" | "email" | "number" | "radio";
 
 interface FormInputProps {
   label: string;
   id: string;
-  name: string;
-  placeholder: string;
-  value: string;
+  placeholder?: string;
   type: FormInputType;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
   options?: {
     id: number;
     title: string;
     icons: React.FC<React.SVGProps<SVGSVGElement>>[];
   }[];
-  checkedValue?: string;
+  register: UseFormRegisterReturn;
 }
 
 const FormInput = ({
   label,
   id,
-  name,
   placeholder,
-  value,
   type,
-  onChange,
+  error,
   options = [],
-  checkedValue,
+  register,
 }: FormInputProps) => {
   if (type === "radio") {
     return (
@@ -76,7 +31,7 @@ const FormInput = ({
         <label className="sr-only" htmlFor={id}>
           {label}
         </label>
-
+        {error && <span className="mb-2 text-sm text-red-500">{error}</span>}
         <div className="space-y-2">
           {options.map((option) => (
             <label
@@ -86,10 +41,8 @@ const FormInput = ({
               <input
                 type="radio"
                 id={id}
-                name={name}
                 value={option.title}
-                checked={checkedValue === option.title}
-                onChange={onChange}
+                {...register}
                 className="h-5 w-5"
               />
               <span className="text-gray-darkest text-sm font-normal">
@@ -114,12 +67,12 @@ const FormInput = ({
       </label>
       <input
         id={id}
-        name={name}
         type={type}
         placeholder={placeholder}
-        value={value}
-        onChange={onChange}
+        className={`${error ? "border-red-500" : ""}`}
+        {...register}
       />
+      {error && <span className="mt-1 ml-1 text-sm text-red-500">{error}</span>}
     </div>
   );
 };

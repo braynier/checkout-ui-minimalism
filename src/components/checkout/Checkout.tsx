@@ -1,129 +1,124 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import Cart from "../cart/Cart";
-import FormInput from "../form/FormInput";
 import Button from "../ui/Button";
-import FormSelectInput from "../form/FormSelect";
 import { Text } from "../ui/Text";
-import FormFieldGroup from "../form/FormField";
-import Form from "../form/Form";
 import Lock from "../icons/benefits/Lock";
+import Form from "../form/Form";
+import FormInput from "../form/FormInput";
+import FormSelectInput from "../form/FormSelect";
+import FormFieldGroup from "../form/FormField";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+
 import { countries, countryStatesMap, options } from "../../../data/data";
+import { DEFAULT_FORM_VALUES } from "../../constants/checkout-form-defaults";
+import { CheckoutFormData } from "../../types/checkout-form-types";
+import { checkoutSchema } from "../../schemas/checkout-form-schema";
+
+const FORM_DATA_KEY = "CheckoutFormData";
 
 const Checkout = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    firstName: "",
-    lastName: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: "United States",
-    cardNumber: "",
-    paymentMethod: "",
-    expirationDate: "",
-    securityCode: "",
-    cardholderName: "",
+  const { saveToStorage } = useLocalStorage<CheckoutFormData>();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<CheckoutFormData>({
+    resolver: zodResolver(checkoutSchema),
+    defaultValues: DEFAULT_FORM_VALUES,
+    reValidateMode: "onChange",
   });
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
+  const selectedCountry = watch("delivery.country");
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-      ...(name === "country" && { state: "" }), // Reset state when country changes
-    }));
+  const onSubmit = (data: CheckoutFormData) => {
+    saveToStorage(FORM_DATA_KEY, data);
+
+    console.log("Form submitted:", data);
+
+    reset();
   };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-  };
-
   return (
     <section className="border-gray-lighter border-b">
       <Cart />
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <FormFieldGroup title="Contact">
           <FormInput
-            id="email"
+            id="contact.email"
             label="Email Address"
-            name="email"
             placeholder="Email Address"
             type="email"
-            value={formData.email}
-            onChange={handleChange}
+            error={errors.contact?.email?.message}
+            register={register("contact.email")}
           />
         </FormFieldGroup>
 
         <FormFieldGroup title="Delivery">
           <div className="flex gap-3">
             <FormInput
-              id="firstName"
+              id="delivery.firstName"
               label="First Name"
-              name="firstName"
               placeholder="First Name"
               type="text"
-              value={formData.firstName}
-              onChange={handleChange}
+              error={errors.delivery?.firstName?.message}
+              register={register("delivery.firstName")}
             />
             <FormInput
-              id="lastName"
+              id="delivery.lastName"
               label="Last Name"
-              name="lastName"
               placeholder="Last Name"
               type="text"
-              value={formData.lastName}
-              onChange={handleChange}
+              error={errors.delivery?.lastName?.message}
+              register={register("delivery.lastName")}
             />
           </div>
+
           <FormInput
-            id="address"
+            id="delivery.address"
             label="Address"
-            name="address"
             placeholder="Address"
             type="text"
-            value={formData.address}
-            onChange={handleChange}
+            error={errors.delivery?.address?.message}
+            register={register("delivery.address")}
           />
+
           <FormInput
-            id="city"
+            id="delivery.city"
             label="City"
-            name="city"
             placeholder="City"
             type="text"
-            value={formData.city}
-            onChange={handleChange}
+            error={errors.delivery?.city?.message}
+            register={register("delivery.city")}
           />
+
           <div className="flex gap-3">
             <FormSelectInput
-              id="state"
+              id="delivery.state"
               label="State / Province"
-              name="state"
-              options={countryStatesMap[formData.country] || []}
-              value={formData.state}
-              onChange={handleChange}
+              options={countryStatesMap[selectedCountry] || []}
+              error={errors.delivery?.state?.message}
+              register={register("delivery.state")}
             />
             <FormInput
-              id="zip"
+              id="delivery.zip"
               label="ZIP / Postal Code"
-              name="zip"
               placeholder="ZIP / Postal Code"
               type="text"
-              value={formData.zip}
-              onChange={handleChange}
+              error={errors.delivery?.zip?.message}
+              register={register("delivery.zip")}
             />
           </div>
+
           <FormSelectInput
-            id="country"
+            id="delivery.country"
             label="Country"
-            name="country"
             options={countries}
-            value={formData.country}
-            onChange={handleChange}
+            error={errors.delivery?.country?.message}
+            register={register("delivery.country")}
           />
         </FormFieldGroup>
 
@@ -135,63 +130,56 @@ const Checkout = () => {
           <div className="bg-neutral-50">
             <FormInput
               label="Payment Method"
-              id="paymentMethod"
-              name="paymentMethod"
+              id="payment.method"
               type="radio"
-              placeholder="Payment Method"
-              value={formData.paymentMethod}
-              onChange={handleChange}
               options={options}
-              checkedValue="Credit Card"
+              error={errors.payment?.method?.message}
+              register={register("payment.method")}
             />
 
             <div className="border-gray-lighter flex flex-col gap-3 rounded-b-md border-x border-b p-3">
               <FormInput
-                id="cardNumber"
+                id="payment.cardNumber"
                 label="Card Number"
-                name="cardNumber"
                 placeholder="Card Number"
                 type="text"
-                value={formData.cardNumber}
-                onChange={handleChange}
+                error={errors.payment?.cardNumber?.message}
+                register={register("payment.cardNumber")}
               />
 
               <div className="flex gap-3">
                 <FormInput
-                  id="expirationDate"
+                  id="payment.expirationDate"
                   label="Expiration (MM/YY)"
-                  name="expirationDate"
-                  placeholder="Expiration (MM/YY)"
+                  placeholder="MM/YY"
                   type="text"
-                  value={formData.expirationDate}
-                  onChange={handleChange}
+                  error={errors.payment?.expirationDate?.message}
+                  register={register("payment.expirationDate")}
                 />
                 <FormInput
-                  id="securityCode"
+                  id="payment.securityCode"
                   label="Security Code"
-                  name="securityCode"
                   placeholder="Security Code"
                   type="text"
-                  value={formData.securityCode}
-                  onChange={handleChange}
+                  error={errors.payment?.securityCode?.message}
+                  register={register("payment.securityCode")}
                 />
               </div>
 
               <FormInput
-                id="cardholderName"
+                id="payment.cardholderName"
                 label="Name on Card"
-                name="cardholderName"
-                placeholder="Name on Card"
+                placeholder="Name on card"
                 type="text"
-                value={formData.cardholderName}
-                onChange={handleChange}
+                error={errors.payment?.cardholderName?.message}
+                register={register("payment.cardholderName")}
               />
             </div>
           </div>
         </FormFieldGroup>
 
         <div className="flex flex-col gap-4 bg-white px-4 pb-3">
-          <Button>Complete Order</Button>
+          <Button type="submit">Complete Order</Button>
           <div className="flex items-baseline justify-center gap-2">
             <Lock />
             <Text size="sm" color="light" position="center">

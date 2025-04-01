@@ -1,10 +1,10 @@
 export function useLocalStorage<T>() {
-  const saveToStorage = (key: string, value: T) => {
+  const saveToStorage = (keyPrefix: string, value: T): void => {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      const uniqueKey = `${keyPrefix}_${Date.now()}`;
+      localStorage.setItem(uniqueKey, JSON.stringify(value));
     } catch (error) {
-      console.error("Error saving to localStorage:", error);
-      throw error; // Re-throw if you want to handle errors in the component
+      console.error(`Failed to save "${keyPrefix}" to localStorage:`, error);
     }
   };
 

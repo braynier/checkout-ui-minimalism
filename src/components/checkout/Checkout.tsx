@@ -14,13 +14,17 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { countries, countryStatesMap, options } from "../../../data/data";
 import { DEFAULT_FORM_VALUES } from "../../constants/checkout-form-defaults";
 
-import { checkoutSchema } from "../../schemas/checkout-form-schema";
-import { CheckoutFormData } from "../../types/checkout-form-types";
+import {
+  CheckoutFormData,
+  CheckoutFormErrors,
+} from "../../types/checkout-form-types";
+import { useCheckoutSchema } from "../../hooks/useCheckoutSchema";
 
 const FORM_DATA_KEY = "CheckoutFormData";
 
 const Checkout = () => {
   const { saveToStorage } = useLocalStorage<CheckoutFormData>();
+  const schema = useCheckoutSchema();
 
   const {
     register,
@@ -29,18 +33,15 @@ const Checkout = () => {
     reset,
     formState: { errors },
   } = useForm<CheckoutFormData>({
-    resolver: zodResolver(checkoutSchema),
+    resolver: zodResolver(schema),
     defaultValues: DEFAULT_FORM_VALUES,
     reValidateMode: "onChange",
   });
 
   const selectedCountry = watch("delivery.country");
 
-  const onSubmit = (data: CheckoutFormData) => {
+  const formSubmission = (data: CheckoutFormData) => {
     saveToStorage(FORM_DATA_KEY, data);
-
-    console.log("Form submitted:", data);
-
     reset();
   };
   return (
@@ -48,14 +49,14 @@ const Checkout = () => {
       <Cart />
 
       <div className="xxl:pt-10 xxl:pr-[2.375rem] xxl:pl-[27.5rem] xxl:pb-6 xxl:border-r border-gray-lighter w-full">
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(formSubmission)}>
           <FormFieldGroup title="Contact" hiddenOnLg={true}>
             <FormInput
               id="contact.email"
               label="Email Address"
               placeholder="Email Address"
               type="email"
-              error={errors.contact?.email?.message}
+              error={(errors as CheckoutFormErrors).contact?.email?.message}
               register={register("contact.email")}
             />
           </FormFieldGroup>
@@ -67,7 +68,9 @@ const Checkout = () => {
                 label="First Name"
                 placeholder="First Name"
                 type="text"
-                error={errors.delivery?.firstName?.message}
+                error={
+                  (errors as CheckoutFormErrors).delivery?.firstName?.message
+                }
                 register={register("delivery.firstName")}
               />
               <FormInput
@@ -75,7 +78,9 @@ const Checkout = () => {
                 label="Last Name"
                 placeholder="Last Name"
                 type="text"
-                error={errors.delivery?.lastName?.message}
+                error={
+                  (errors as CheckoutFormErrors).delivery?.lastName?.message
+                }
                 register={register("delivery.lastName")}
               />
             </div>
@@ -85,7 +90,7 @@ const Checkout = () => {
               label="Address"
               placeholder="Address"
               type="text"
-              error={errors.delivery?.address?.message}
+              error={(errors as CheckoutFormErrors).delivery?.address?.message}
               register={register("delivery.address")}
               hiddenOnLg={true}
             />
@@ -137,7 +142,7 @@ const Checkout = () => {
                 id="payment.method"
                 type="radio"
                 options={options}
-                error={errors.payment?.method?.message}
+                error={(errors as CheckoutFormErrors).payment?.method?.message}
                 register={register("payment.method")}
                 hiddenOnLg={true}
               />

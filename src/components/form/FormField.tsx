@@ -22,7 +22,7 @@ const FormFieldGroup = ({
         <Heading text={title} />
       </legend>
 
-      <div className="flex flex-col gap-4 [&>p]:-mb-0.5">{children}</div>
+      <div className="flex flex-col gap-4 [&>p]:-mb-1">{children}</div>
     </fieldset>
   );
 };

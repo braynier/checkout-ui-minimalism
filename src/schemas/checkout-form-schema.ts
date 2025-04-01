@@ -1,38 +1,66 @@
 import * as z from "zod";
 
-export const checkoutSchema = z.object({
-  contact: z.object({
-    email: z
-      .string()
-      .min(1, { message: "Email is required" })
-      .email({ message: "Please enter a valid email" }),
-  }),
+const validations = {
+  email: z.string().min(1, "Email required").email("Invalid email"),
+
+  firstName: z.string().min(1, "First name required"),
+  lastName: z.string().min(1, "Last name required"),
+  address: z.string().min(1, "Address required"),
+  city: z.string().min(1, "City required"),
+  state: z.string().min(1, "State required"),
+  zip: z.string().min(1, "ZIP required").regex(/^\d+$/, "Numbers only"),
+  country: z.string().min(1, "Country required"),
+
+  paymentMethod: z.string().min(1, "Payment method required"),
+  cardNumber: z
+    .string()
+    .min(1, "Card number required")
+    .regex(/^\d{16}$/, "Must be 16 digits"),
+  expiration: z
+    .string()
+    .min(1, "Expiration required")
+    .regex(/^(0[1-9]|1[0-2])\/?([0-9]{2})$/, "Use MM/YY format"),
+  securityCode: z
+    .string()
+    .min(1, "Security code required")
+    .regex(/^\d{3,4}$/, "3-4 digits required"),
+  cardholderName: z.string().min(1, "Name required"),
+};
+
+export const checkoutSchemaMobile = z.object({
+  contact: z.object({ email: validations.email }),
   delivery: z.object({
-    firstName: z.string().min(1, { message: "First name is required" }),
-    lastName: z.string().min(1, { message: "Last name is required" }),
-    address: z.string().min(1, { message: "Address is required" }),
-    city: z.string().min(1, { message: "City is required" }),
-    state: z.string().min(1, { message: "State is required" }),
-    zip: z
-      .string()
-      .min(1, { message: "ZIP code is required" })
-      .regex(/^\d+$/, { message: "ZIP must be numbers only" }),
-    country: z.string().min(1, { message: "Country is required" }),
+    firstName: validations.firstName,
+    lastName: validations.lastName,
+    address: validations.address,
+    city: validations.city,
+    state: validations.state,
+    zip: validations.zip,
+    country: validations.country,
   }),
   payment: z.object({
-    method: z.string().min(1, { message: "Payment method is required" }),
-    cardNumber: z
-      .string()
-      .min(1, { message: "Card number is required" })
-      .regex(/^\d{16}$/, { message: "Card number must be 16 digits" }),
-    expirationDate: z
-      .string()
-      .min(1, { message: "Expiration date is required" })
-      .regex(/^(0[1-9]|1[0-2])\/?([0-9]{2})$/, { message: "Use MM/YY format" }),
-    securityCode: z
-      .string()
-      .min(1, { message: "Security code is required" })
-      .regex(/^\d{3,4}$/, { message: "3-4 digits required" }),
-    cardholderName: z.string().min(1, { message: "Name is required" }),
+    method: validations.paymentMethod,
+    cardNumber: validations.cardNumber,
+    expirationDate: validations.expiration,
+    securityCode: validations.securityCode,
+    cardholderName: validations.cardholderName,
   }),
 });
+
+export const checkoutSchemaDesktop = z.object({
+  delivery: z.object({
+    city: validations.city,
+    state: validations.state,
+    zip: validations.zip,
+    country: validations.country,
+  }),
+  payment: z.object({
+    cardNumber: validations.cardNumber,
+    expirationDate: validations.expiration,
+    securityCode: validations.securityCode,
+    cardholderName: validations.cardholderName,
+  }),
+});
+
+export const getCheckoutSchema = (isMobile: boolean) =>
+  isMobile ? checkoutSchemaMobile : checkoutSchemaDesktop;

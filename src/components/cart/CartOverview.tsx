@@ -5,7 +5,7 @@ const CartOverview = () => {
   const { toggleCart, isExpanded, total } = useCart();
 
   return (
-    <div className="flex justify-between p-4">
+    <div className="flex justify-between p-4 lg:hidden">
       <button
         className="flex items-center gap-2 hover:cursor-pointer"
         onClick={toggleCart}

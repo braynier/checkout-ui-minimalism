@@ -17,6 +17,8 @@
 
   --color-blue-dark: #3362ab;
   --color-blue-light: #f0f5ff;
+
+  --breakpoint-xxl: 120rem;
 }
 
 @layer base {
@@ -29,6 +31,6 @@
   }
 
   select {
-    @apply border-gray-lighter text-gray-darkest h-full w-full appearance-none rounded-md border px-4 pt-7 pb-2 text-sm font-normal;
+    @apply border-gray-lighter text-gray-darkest h-full w-full appearance-none rounded-md border bg-white px-4 pt-7 pb-2 text-sm font-normal;
   }
 }

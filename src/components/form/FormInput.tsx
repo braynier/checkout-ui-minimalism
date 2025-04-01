@@ -14,6 +14,7 @@ interface FormInputProps {
     icons: React.FC<React.SVGProps<SVGSVGElement>>[];
   }[];
   register: UseFormRegisterReturn;
+  hiddenOnLg?: boolean;
 }
 
 const FormInput = ({
@@ -24,10 +25,13 @@ const FormInput = ({
   error,
   options = [],
   register,
+  hiddenOnLg = false,
 }: FormInputProps) => {
+  const hiddenClass = hiddenOnLg ? "lg:hidden" : "";
+
   if (type === "radio") {
     return (
-      <div className="flex w-full flex-col">
+      <div className={`flex w-full flex-col ${hiddenClass}`}>
         <label className="sr-only" htmlFor={id}>
           {label}
         </label>
@@ -61,7 +65,7 @@ const FormInput = ({
   }
 
   return (
-    <div className="flex w-full flex-col">
+    <div className={`flex w-full flex-col ${hiddenClass}`}>
       <label className="sr-only" htmlFor={id}>
         {label}
       </label>
